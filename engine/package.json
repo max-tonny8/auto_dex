@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx ts-node ./src/app.ts"
+    "start": "npx ts-node -r tsconfig-paths/register ./src/app.ts"
   },
   "keywords": [],
   "author": "",
