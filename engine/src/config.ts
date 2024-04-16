@@ -19,6 +19,7 @@ function getExchange(exchange: string): Exchange {
     }
 }
 
+const WS_PORT: number = parseInt(`${process.env.WS_PORT}`);
 const INTERVAL: number = parseInt(`${process.env.INTERVAL}`);
 const NETWORK: string = `${process.env.NETWORK}`;
 const NETWORK_2: ChainId = getNetwork(NETWORK);
@@ -29,6 +30,7 @@ const SWAP_GRAPH_URL: string = `${process.env.SWAP_GRAPH_URL}`;
 const POOL_COUNT: number = parseInt(`${process.env.POOL_COUNT}`);
 
 export default {
+    WS_PORT,
     INTERVAL,
     NETWORK,
     NETWORK_2,
