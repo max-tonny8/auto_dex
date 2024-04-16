@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npx ts-node -r tsconfig-paths/register ./src/app",
-    "seeder": "npx ts-node -r tsconfig-paths/register ./src/seeders/1_tokens"
+    "seeder": "npx ts-node -r tsconfig-paths/register ./src/seeders/0_index"
   },
   "keywords": [],
   "author": "",
