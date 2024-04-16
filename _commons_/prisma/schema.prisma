@@ -15,7 +15,7 @@ datasource db {
 }
 
 model tokens {
-  id       String @id @map("_id") @db.ObjectId
+  id       String @id @map("_id")
   name     String
   symbol   String
   decimals Int
@@ -23,7 +23,7 @@ model tokens {
 }
 
 model pools {
-  id           String   @id @map("_id") @db.ObjectId
+  id           String   @id @map("_id")
   token0       String // token address
   token1       String
   symbol       String

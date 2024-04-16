@@ -24,7 +24,7 @@ async function addPool(pool: Pool): Promise<Pool> {
     return createdPool;
 }
 
-export {
+export default {
     getPool,
     addPool
 }
