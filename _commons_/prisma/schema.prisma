@@ -34,8 +34,7 @@ model pools {
   network      Int
   price0       String
   price0Change Float
-  last0Update  DateTime
   price1       String
   price1Change Float
-  last1Update  DateTime
+  lastUpdate   DateTime
 }

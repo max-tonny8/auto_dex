@@ -13,10 +13,9 @@ export class Pool {
     network: ChainId;
     price0: string;
     price0Change: number;
-    last0Update: Date;
     price1: string;
     price1Change: number;
-    last1Update: Date;
+    lastUpdate: Date;
 
     constructor(pool: Pool) {
         this.id = pool.id;
@@ -31,10 +30,9 @@ export class Pool {
 
         this.price0 = pool.price0 || "0";
         this.price0Change = pool.price0Change || 0;
-        this.last0Update = pool.last0Update || new Date();
 
         this.price1 = pool.price1 || "0";
         this.price1Change = pool.price1Change || 0;
-        this.last1Update = pool.last1Update || new Date();
+        this.lastUpdate = pool.lastUpdate || new Date();
     }
 }
