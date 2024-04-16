@@ -23,18 +23,28 @@ model tokens {
 }
 
 model pools {
-  id           String   @id @map("_id")
-  token0       String // token address
-  token1       String
-  symbol       String
-  symbol0      String // token symbol
-  symbol1      String
-  fee          Int
-  exchange     Int
-  network      Int
-  price0       String
-  price0Change Float
-  price1       String
-  price1Change Float
-  lastUpdate   DateTime
+  id              String   @id @map("_id")
+  token0          String // token address
+  token1          String
+  symbol          String
+  symbol0         String // token symbol
+  symbol1         String
+  fee             Int
+  exchange        Int
+  network         Int
+  price0          String
+  price0Change    Float
+  price0_15       String
+  price0Change_15 Float
+  price0_60       String
+  price0Change_60 Float
+  price1          String
+  price1Change    Float
+  price1_15       String
+  price1Change_15 Float
+  price1_60       String
+  price1Change_60 Float
+  lastUpdate      DateTime
+  lastUpdate_15   DateTime
+  lastUpdate_60   DateTime
 }
