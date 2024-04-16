@@ -38,10 +38,24 @@ async function addPool(pool: Pool): Promise<Pool> {
     return createdPool;
 }
 
-async function updatePrices(poolData: PoolData): Promise<Pool | null> {
-    const newPrice0 = Number(poolData.token0Price);
-    const newPrice1 = Number(poolData.token1Price);
+function buildSetPrice(pool: Pool, newPrice: number, tokenNumber: string) {
+    if (!["0", "1"].includes(tokenNumber)) {
+        throw new Error(`Invalid`);
+    }
 
+    const oldPrice = Number(tokenNumber === '0' ? pool.price0 : pool.price1);
+    const priceChange = ((newPrice - oldPrice) / oldPrice) * 100;
+
+    const setObj: any = {};
+    setObj[`price${tokenNumber}`] = `${newPrice}`;
+    setObj[`price${tokenNumber}Change`] = priceChange && Number.isFinite(priceChange) ? priceChange : 0;
+    setObj.lastUpdate = new Date();
+
+    return setObj;
+    
+}
+
+async function updatePrices(poolData: PoolData): Promise<Pool | null> {
     const db = await connect();
 
     let pool = await getPool(poolData.id);
@@ -62,13 +76,15 @@ async function updatePrices(poolData: PoolData): Promise<Pool | null> {
        pool = await addPool(pool);
     }
 
+    const newPrice0 = Number(poolData.token0Price);
+    const newPrice1 = Number(poolData.token1Price);
+
+    const obj0 = buildSetPrice(pool, newPrice0, "0");
+    const obj1 = buildSetPrice(pool, newPrice1, "1");
+
     await db.pools.update({
         where: { id: poolData.id },
-        data: {
-            price0: poolData.token0Price,
-            price1: poolData.token1Price,
-            lastUpdate: new Date(),
-        }
+        data: { ...obj0, ...obj1 }
     });
 
     return getPool(poolData.id);
