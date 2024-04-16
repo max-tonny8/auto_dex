@@ -1,4 +1,4 @@
-import { ChainId } from "./chainid";
+import { ChainId } from "./chainId";
 
 export type Token = {
     id: string;

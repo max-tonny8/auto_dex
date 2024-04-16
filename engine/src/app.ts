@@ -1,5 +1,4 @@
 import Config from './config';
-import { Token } from 'commons/models/token';
+import { getTopPools } from './services/uniswapService';
 
-console.log("Hello World");
-console.log(Config.EXCHANGE_2);
+getTopPools().then(data => console.log(data));
