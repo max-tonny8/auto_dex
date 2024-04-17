@@ -1,5 +1,6 @@
 'use client';
 
+import { DefaultCard } from "@/components/default-card";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -17,8 +18,8 @@ export default function Login() {
             ></div>
         
             <div className="relative flex flex-col h-screen items-center justify-center">
-                <h1 className="text-gray-300 font-bold text-4xl mb-6">POSEIDON</h1>
-                <div className=" bg-gray-300 shadow-md shadow-gray-800 rounded-md p-6 text-gray-700 font-bold mx-4">
+                <h1 className="text-gray-50 font-bold text-4xl mb-6">POSEIDON</h1>
+                <DefaultCard>
                     <div className="flex flex-col items-center justify-center gap-6">
                         <Image src="/img/poseidon_logo.png" alt="Google" width={200} height={200} />
                         Sign in with your wallet and and start bot trading
@@ -27,7 +28,7 @@ export default function Login() {
                             CLICK TO CONNECT
                         </button>
                     </div>
-                </div>
+                </DefaultCard>
                 <Link href="/register" className="mt-6">
                     <span className="text-gray-300 mt-4 text-sm font-semibold">Create new account</span>
                 </Link>
