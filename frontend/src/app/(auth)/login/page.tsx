@@ -6,10 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { DefaultCard } from "@/components/default-card";
 
-export function Login() {
+export default function Login() {
     const { push } = useRouter();
     async function btnLoginClick() {
-        push("/auth/register");
+        push("/register");
     }
 
     const [message, setMessage] = useState<string>("");
@@ -21,14 +21,14 @@ export function Login() {
                 <Image src="/img/poseidon_logo.png" alt="Google" width={200} height={200} />
                 Sign in with your wallet and and start bot trading
                 <button
-                    className="bg-sky-900 p-4 rounded-md self-stretch text-gray-100 flex items-center justify-center gap-6 hover:bg-sky-950"
+                    className="bg-sky-900 p-4 rounded-sm self-stretch text-gray-100 flex items-center justify-center gap-6 hover:bg-sky-950"
                     type="button"
                     onClick={btnLoginClick}
                 >
                     <Image src="/metamask.svg" alt="Google" width={64} height={64} />
                     CLICK TO CONNECT
                 </button>
-                <span className="text-gray-300 mt-4 text-sm font-semibold">{message}</span>
+                { message && <span className="text-gray-800 text-sm font-normal">{message}</span>}
             </div>
         </DefaultCard>
         <Link href="/register" className="mt-6">
