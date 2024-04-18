@@ -5,6 +5,10 @@ import Image from "next/image";
 import { useRouter, useParams } from 'next/navigation';
 import { DefaultCard } from "@/components/default-card";
 import { useEffect, useState } from "react";
+import { User } from 'commons/models/user';
+import { Plan } from 'commons/models/plan';
+import { Status } from "commons/models/status";
+import { ChainId } from "commons/models/chainId";
 
 export default function Pay() {
     const { push } = useRouter();
@@ -12,21 +16,27 @@ export default function Pay() {
 
     const wallet: string = typeof params.wallet === "string" ? params.wallet : params.wallet[0];
 
-    const [user, setUser] = useState<any>({});
-    const [plan, setPlan] = useState<any>({});
+    const [user, setUser] = useState<User>({} as User);
+    const [plan, setPlan] = useState<Plan>({} as Plan);
     const [message, setMessage] = useState<string>("");
 
     useEffect(() => {
         setUser({
             name: "Caique Ribeiro",
-            wallet: wallet,
+            email: "ribeiro.caique95@gmail.com",
+            address: wallet,
             planId: "3",
+            status: Status.BLOCKED,
+            network: ChainId.SEPOLIA,
+            activationCode: "123456",
+            activationDate: new Date()
         });
 
         setPlan({
             id: "3",
             name: "Gold",
-            symbol: "WETH",
+            tokenSymbol: "WETH",
+            tokenAddress: "0x0000",
             price: "0.001",
             maxAutomations: 10
         });
@@ -45,7 +55,7 @@ export default function Pay() {
                     <div className="flex flex-col justify-start gap-1 w-full">
                         <label htmlFor="user">USER</label>
                         <span  id="user" className="font-light">{user.name}</span>
-                        <span className="font-medium text-sm bg-gray-400 border border-gray-200 rounded-md py-2 px-3 w-fit">{user.wallet || "Not informed yet"}</span>
+                        <span className="font-medium text-sm bg-gray-400 border border-gray-200 rounded-md py-2 px-3 w-fit">{user.address || "Not informed yet"}</span>
                     </div>
 
                     <div className="flex flex-col justify-start gap-1 w-full">
@@ -58,7 +68,7 @@ export default function Pay() {
                     </div>
 
                     <span className="font-light">
-                        This system costs <strong className="font-black">{plan.symbol} ${plan.price}/mo.</strong> and gives you full access to out platform,
+                        This system costs <strong className="font-black">{plan.tokenSymbol} ${plan.price}/mo.</strong> and gives you full access to out platform,
                         as well as <strong className="font-black">{plan.maxAutomations}</strong> automations
                         <br /><br />
                         You last payment was: <strong className="font-black">Never</strong>
