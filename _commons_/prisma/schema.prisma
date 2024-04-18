@@ -48,3 +48,24 @@ model pools {
   lastUpdate_15   DateTime
   lastUpdate_60   DateTime
 }
+
+model users {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  address        String   @unique
+  name           String
+  email          String
+  status         Int
+  network        Int
+  planId         String
+  activationCode String
+  activationDate DateTime
+}
+
+model plans {
+  id             String @id @map("_id")
+  name           String
+  price          String
+  tokenSymbol    String
+  tokenAddress   String
+  maxAutomations Int
+}
