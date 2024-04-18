@@ -2,7 +2,7 @@ import { AuthFooter } from "@/components/Auth/auth-footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Poseidon - Login",
+  title: "Poseidon",
   description: "Trading bot platform",
 };
 
