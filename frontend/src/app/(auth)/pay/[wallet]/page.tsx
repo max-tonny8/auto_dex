@@ -20,7 +20,7 @@ export default function Pay() {
         setUser({
             name: "Caique Ribeiro",
             wallet: wallet,
-            planId: "Gold",
+            planId: "3",
         });
 
         setPlan({
@@ -51,9 +51,9 @@ export default function Pay() {
                     <div className="flex flex-col justify-start gap-1 w-full">
                         <label htmlFor="user">PLAN</label>
                         <select name="plans" id="plan" className="p-2 rounded-sm focus:outline-none bg-sky-900 text-gray-100">
-                            <option value="1">Bronze</option>
-                            <option value="2">Silver</option>
-                            <option value="3">Gold</option>
+                            <option value="1" selected={user.planId === "1"}>Bronze</option>
+                            <option value="2" selected={user.planId === "2"}>Silver</option>
+                            <option value="3" selected={user.planId === "3"}>Gold</option>
                         </select>
                     </div>
 
