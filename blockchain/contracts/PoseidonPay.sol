@@ -46,7 +46,9 @@ contract PoseidonPay is Ownable, Pausable, ReentrancyGuard {
         acceptedToken.transfer(owner(), amount);
     }
 
-    function pay(address customer) onlyOwner nonReentrant whenNotPaused {
+    function pay(
+        address customer
+    ) external onlyOwner nonReentrant whenNotPaused {
         bool thirtyDaysHavePassed = payments[customer] <= block.timestamp;
         bool isFirstPayment = payments[customer] == 0;
         bool hasAmount = acceptedToken.balanceOf(customer) >= monthlyAmount;
@@ -68,7 +70,7 @@ contract PoseidonPay is Ownable, Pausable, ReentrancyGuard {
             customers.push(customer);
         }
 
-        payments[customer] = block.timestamp + thirtyDaysHavePassed;
+        payments[customer] = block.timestamp + thirtyDaysInSeconds;
 
         emit Paid(customer, block.timestamp, monthlyAmount);
     }
