@@ -11,7 +11,7 @@ contract PoseidonPay is Ownable, Pausable, ReentrancyGuard {
     uint256 public monthlyAmount = 0.001 ether;
     uint256 private constant thirtyDaysInSeconds = 24 * 30 * 60 * 60;
 
-    map(address => uint) public payments; // customer => last payment timestamp
+    mapping(address => uint) public payments; // customer => last payment timestamp
     address[] public customers;
 
     constructor() Ownable(msg.sender) {
@@ -28,7 +28,7 @@ contract PoseidonPay is Ownable, Pausable, ReentrancyGuard {
         _unpause();
     }
 
-    function getCustomers() external view returns(address[] memory) {
+    function getCustomers() external view returns (address[] memory) {
         return customers;
     }
 
@@ -50,18 +50,21 @@ contract PoseidonPay is Ownable, Pausable, ReentrancyGuard {
         bool thirtyDaysHavePassed = payments[customer] <= block.timestamp;
         bool isFirstPayment = payments[customer] == 0;
         bool hasAmount = acceptedToken.balanceOf(customer) >= monthlyAmount;
-        bool gavePermission = acceptedToken.allowance(customer, address(this)) >= monthlyAmount;
+        bool gavePermission = acceptedToken.allowance(
+            customer,
+            address(this)
+        ) >= monthlyAmount;
         bool isTimeToPay = thirtyDaysHavePassed || isFirstPayment;
 
-        if(!isTimeToPay) return;
+        if (!isTimeToPay) return;
 
-        if(!hasAmount || !gavePermission) {
+        if (!hasAmount || !gavePermission) {
             revert("Insufficient balance and/or allowance");
         }
 
         acceptedToken.transferFrom(customer, address(this), monthlyAmount);
 
-        if(isFirstPayment) {
+        if (isFirstPayment) {
             customers.push(customer);
         }
 
