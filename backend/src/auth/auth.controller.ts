@@ -1,4 +1,12 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  NotFoundException,
+  Param,
+  Post,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthDTO } from './auth.dto';
 import { UserDTO } from '../user/user.dto';
 import { UserService } from 'src/user/user.service';
@@ -6,6 +14,8 @@ import { User } from 'commons/models/user';
 import { MailerService } from '@nestjs-modules/mailer';
 import Config from '../config';
 import { AuthService } from './auth.service';
+import { ethers } from 'ethers';
+import { Status } from 'commons/models/status';
 
 @Controller('auth')
 export class AuthController {
@@ -16,8 +26,38 @@ export class AuthController {
   ) {}
 
   @Post('/signin')
-  signIn(@Body() data: AuthDTO): object {
-    return data;
+  async signIn(@Body() data: AuthDTO): Promise<string> {
+    const aMinuteAgo = Date.now() - 60 * 1000;
+    if (data.timestamp < aMinuteAgo) {
+      throw new BadRequestException('timestamp too old');
+    }
+
+    const message = Config.AUTH_MSG.replace('<timestamp>', `${data.timestamp}`);
+
+    let signer: string;
+
+    try {
+      signer = ethers.verifyMessage(message, data.secret);
+    } catch (error) {
+      throw new BadRequestException('Invalid secret');
+    }
+
+    if (signer.toUpperCase() !== data.wallet.toUpperCase()) {
+      throw new UnauthorizedException('Wallet and secret do not match');
+    }
+
+    const user = await this.userService.getUserByWallet(data.wallet);
+    if (!user) throw new NotFoundException('User not found');
+    if (user.status === Status.BANNED)
+      throw new UnauthorizedException('User is banned');
+
+    return this.authService.createToken({
+      userId: user.id,
+      address: user.address,
+      name: user.name,
+      planId: user.planId,
+      status: user.status,
+    });
   }
 
   @Post('/signup')
