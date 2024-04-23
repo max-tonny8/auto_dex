@@ -1,6 +1,6 @@
 import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { AuthDTO } from './auth.dto';
-import { UserDTO } from './user.dto';
+import { UserDTO } from '../user/user.dto';
 
 @Controller('auth')
 export class AuthController {

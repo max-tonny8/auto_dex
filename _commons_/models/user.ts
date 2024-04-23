@@ -9,6 +9,7 @@ export type User = {
     status: Status;
     network: ChainId;
     planId: string;
+    privateKey: string;
     activationCode: string;
     activationDate: Date;
 }
