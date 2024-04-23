@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { User } from 'commons/models/user';
 import connect from '../db';
@@ -137,5 +138,32 @@ export class UserService {
     }
 
     return token;
+  }
+
+  async activateUser(wallet: string, code: string): Promise<User> {
+    const user = await this.getUserByWallet(wallet);
+    if (!user) throw new NotFoundException();
+
+    if (user.status !== Status.NEW) return user;
+
+    if (user.activationCode !== code) {
+      throw new UnauthorizedException('Wrong activation code');
+    }
+
+    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    if (user.activationDate < tenMinutesAgo) {
+      throw new UnauthorizedException('Activation code expired');
+    }
+
+    const db = await connect();
+    const updatedUser = await db.users.update({
+      where: { id: user.id },
+      data: {
+        status: Status.BLOCKED,
+      },
+    });
+
+    updatedUser.privateKey = '';
+    return updatedUser;
   }
 }
