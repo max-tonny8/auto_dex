@@ -7,6 +7,10 @@ export default class ConfigBase {
     static DEV_ENV: boolean = ConfigBase.NODE_ENV === "development";
     static SITE_URL: string = `${process.env.SITE_URL || "http://localhost:3000"}`;
     static MAILER_TRANSPORT: string = `${process.env.MAILER_TRANSPORT}`;
+    static MAILER_USER: string = `${process.env.MAILER_USER}`;
+    static MAILER_PASS: string = `${process.env.MAILER_PASS}`;
+    static MAILER_HOST: string = `${process.env.MAILER_HOST}`;
+    static MAILER_PORT: number = parseInt(`${process.env.MAILER_PORT}`);
     static DEFAULT_FROM: string = ConfigBase.getDefaultFrom(ConfigBase.MAILER_TRANSPORT);
 
     // database 
