@@ -5,12 +5,14 @@ import { UserService } from 'src/user/user.service';
 import { User } from 'commons/models/user';
 import { MailerService } from '@nestjs-modules/mailer';
 import Config from '../config';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly userService: UserService,
     private readonly mailerService: MailerService,
+    private readonly authService: AuthService,
   ) {}
 
   @Post('/signin')
@@ -70,8 +72,12 @@ export class AuthController {
       `,
     });
 
-    // generate JWT token
-
-    return user.id; // replace by jwt
+    return this.authService.createToken({
+      userId: user.id,
+      address: user.address,
+      name: user.name,
+      planId: user.planId,
+      status: user.status,
+    });
   }
 }
