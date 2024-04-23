@@ -1,4 +1,4 @@
-import  aes from 'aes-js';
+const aes = require('aes-js');
 import ConfigBase from '../configBase';
 
 const key = aes.utils.utf8.toBytes(ConfigBase.AES_KEY);

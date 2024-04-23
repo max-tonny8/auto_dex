@@ -10,6 +10,7 @@ import connect from '../db';
 import { UserDTO } from './user.dto';
 import { Status } from 'commons/models/status';
 import Config from '../config';
+import { encrypt, decrypt } from 'commons/services/cryptoService';
 
 @Injectable()
 export class UserService {
@@ -23,6 +24,9 @@ export class UserService {
         },
       },
     });
+
+    if (!user) throw new NotFoundException();
+
     user.privateKey = '';
     return user;
   }
@@ -34,6 +38,11 @@ export class UserService {
         id: id,
       },
     });
+
+    if (!user) throw new NotFoundException();
+
+    user.privateKey = decrypt(user.privateKey);
+
     return user;
   }
 
@@ -93,11 +102,10 @@ export class UserService {
       address: user.address,
       email: user.email,
       name: user.name,
-      status: user.status,
     };
 
     if (user.privateKey) {
-      data.privateKey = user.privateKey; // todo: encrypt privateKey
+      data.privateKey = encrypt(user.privateKey);
     }
 
     const updatedUser = await db.users.update({
