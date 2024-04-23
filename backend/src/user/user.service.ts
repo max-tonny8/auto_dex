@@ -62,7 +62,7 @@ export class UserService {
           where: { id: oldUser.id },
           data: {
             // refresh the activation code and time
-            activationCode: UserService.generateToken(6),
+            activationCode: UserService.generateActivationCode(6),
             activationDate: new Date(),
           },
         });
@@ -76,7 +76,7 @@ export class UserService {
         email: user.email,
         status: Status.NEW,
         planId: user.planId,
-        activationCode: UserService.generateToken(6),
+        activationCode: UserService.generateActivationCode(6),
         activationDate: new Date(),
         privateKey: '',
         network: Config.CHAIN_ID,
@@ -128,7 +128,7 @@ export class UserService {
     return updatedUser;
   }
 
-  static generateToken(length: number): string {
+  static generateActivationCode(length: number): string {
     const validChars = '0123456789';
     let token = '';
 
