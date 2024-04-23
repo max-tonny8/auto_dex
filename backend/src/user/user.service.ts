@@ -62,7 +62,7 @@ export class UserService {
           where: { id: oldUser.id },
           data: {
             // refresh the activation code and time
-            activationCode: '0', // todo: generate new code
+            activationCode: UserService.generateToken(6),
             activationDate: new Date(),
           },
         });
@@ -76,33 +76,13 @@ export class UserService {
         email: user.email,
         status: Status.NEW,
         planId: user.planId,
-        activationCode: '0', // todo: generate new code
+        activationCode: UserService.generateToken(6),
         activationDate: new Date(),
         privateKey: '',
         network: Config.CHAIN_ID,
       },
     });
     return newUser;
-  }
-
-  async payUser(address: string): Promise<User> {
-    const user = await this.getUserByWallet(address);
-    if (!user) throw new NotFoundException();
-    if (user.status !== Status.BLOCKED) throw new ForbiddenException();
-
-    const db = await connect();
-
-    // todo: pay via blockchain
-
-    const updatedUser = await db.users.update({
-      where: { id: user.id },
-      data: {
-        status: Status.ACTIVE,
-      },
-    });
-
-    updatedUser.privateKey = '';
-    return updatedUser;
   }
 
   async updateUser(id: string, user: UserDTO): Promise<User> {
@@ -126,5 +106,36 @@ export class UserService {
 
     updatedUser.privateKey = '';
     return updatedUser;
+  }
+
+  async payUser(address: string): Promise<User> {
+    const user = await this.getUserByWallet(address);
+    if (!user) throw new NotFoundException();
+    if (user.status !== Status.BLOCKED) throw new ForbiddenException();
+
+    const db = await connect();
+
+    // todo: pay via blockchain
+
+    const updatedUser = await db.users.update({
+      where: { id: user.id },
+      data: {
+        status: Status.ACTIVE,
+      },
+    });
+
+    updatedUser.privateKey = '';
+    return updatedUser;
+  }
+
+  static generateToken(length: number): string {
+    const validChars = '0123456789';
+    let token = '';
+
+    for (let i = 0; i < length; i++) {
+      token += validChars[Math.floor(Math.random() * validChars.length)];
+    }
+
+    return token;
   }
 }
