@@ -104,4 +104,27 @@ export class UserService {
     updatedUser.privateKey = '';
     return updatedUser;
   }
+
+  async updateUser(id: string, user: UserDTO): Promise<User> {
+    const db = await connect();
+
+    const data: any = {
+      address: user.address,
+      email: user.email,
+      name: user.name,
+      status: user.status,
+    };
+
+    if (user.privateKey) {
+      data.privateKey = user.privateKey; // todo: encrypt privateKey
+    }
+
+    const updatedUser = await db.users.update({
+      where: { id: id },
+      data: data,
+    });
+
+    updatedUser.privateKey = '';
+    return updatedUser;
+  }
 }
