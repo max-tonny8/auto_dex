@@ -1,6 +1,5 @@
 'use client';
 
-import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useParams } from 'next/navigation';
 import { DefaultCard } from "@/components/default-card";
@@ -25,6 +24,7 @@ export default function Pay() {
             name: "Caique Ribeiro",
             email: "ribeiro.caique95@gmail.com",
             address: wallet,
+            privateKey: '',
             planId: "3",
             status: Status.BLOCKED,
             network: ChainId.SEPOLIA,
