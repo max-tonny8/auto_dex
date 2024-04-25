@@ -18,7 +18,7 @@ export default function Dashboard() {
           </div>
         </section>
 
-        <section className="flex-1 -mt-20 grid h-3/5 grid-cols-1 sm:grid-cols-3 gap-y-8 sm:gap-x-8 px-14">
+        <section className="flex-1 -mt-20 grid h-3/5 grid-cols-1 sm:grid-cols-3 gap-y-8 sm:gap-8 px-14">
           <div className="bg-white col-span-2 h-96 overflow-hidden shadow-md">
             <TradingViewWidget />
           </div>
