@@ -1,4 +1,5 @@
 import { AdminNavbar } from "@/components/Dashboard/admin-navbar";
+import { SocialTrafficCard } from "@/components/Dashboard/social-traffic-card";
 import { StatisticTopCard } from "@/components/Dashboard/statistic-top-card";
 import { TopPoolsCard } from "@/components/Dashboard/top-pools-card";
 import { TotalOrdersCard } from "@/components/Dashboard/total-orders.card";
@@ -35,7 +36,9 @@ export default function Dashboard() {
           <div className="bg-white h-96 col-span-2 shadow-md">
             <TopPoolsCard />
           </div>
-          <div className="bg-green-600 col-span-1 shadow-md">TESTE</div>
+          <div className="bg-white col-span-1 shadow-md">
+            <SocialTrafficCard />
+          </div>
         </section>
       </div>
     );
