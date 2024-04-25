@@ -1,5 +1,7 @@
 import { AdminNavbar } from "@/components/Dashboard/admin-navbar";
 import { StatisticTopCard } from "@/components/Dashboard/statistic-top-card";
+import { TopPoolsCard } from "@/components/Dashboard/top-pools-card";
+import { TotalOrdersCard } from "@/components/Dashboard/total-orders.card";
 import TradingViewWidget from "@/components/Dashboard/trading-view-widget";
 
 export default function Dashboard() {
@@ -16,13 +18,24 @@ export default function Dashboard() {
           </div>
         </section>
 
-        <section className="flex-1 -mt-20 grid h-3/5 grid-cols-1 sm:grid-cols-3 gap-8 px-14">
-          <div className="bg-white col-span-2 max-h-[400px] overflow-hidden">
+        <section className="flex-1 -mt-20 grid h-3/5 grid-cols-1 sm:grid-cols-3 gap-y-8 sm:gap-x-8 px-14">
+          <div className="bg-white col-span-2 h-96 overflow-hidden shadow-md">
             <TradingViewWidget />
           </div>
-          <div className="bg-white col-span-1 h-96">TESTE</div>
-          <div className="bg-green-600 h-96 col-span-2">TESTE</div>
-          <div className="bg-green-600 col-span-1">TESTE</div>
+          <div className="bg-white col-span-1 h-96 shadow-md p-2 flex flex-col">
+            <div className="flex flex-col items-start flex-1">
+              <div className="flex flex-col justify-start items-center">
+                <h3 className="text-xs text-gray-500">PERFORMANCE</h3>
+                <span className="font-medium text-lg">Total orders</span>
+              </div>
+
+              <TotalOrdersCard />
+            </div>
+          </div>
+          <div className="bg-white h-96 col-span-2 shadow-md">
+            <TopPoolsCard />
+          </div>
+          <div className="bg-green-600 col-span-1 shadow-md">TESTE</div>
         </section>
       </div>
     );
