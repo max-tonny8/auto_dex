@@ -1,10 +1,10 @@
 import { JWT } from 'commons/models/jwt';
 import ConfigService from './config-service';
 import { BrowserProvider } from 'ethers';
-import { Status } from 'commons/models/status';
 import { Plan } from 'commons/models/plan';
 import { Contract } from 'ethers';
 import ERC20_ABI from 'commons/services/ERC20.json';
+import { parseJwt, signIn } from './auth-service';
 
 function getProvider() {
     if(!window.ethereum) {
@@ -35,15 +35,16 @@ export async function doLogin(): Promise<JWT | undefined> {
     const signer = await provider.getSigner();
 
     const challenge = await signer.signMessage(message);
-    console.log(challenge);
 
-    return {
-        address: '',
-        name: 'Caique',
-        planId: "Gold",
-        status: Status.ACTIVE,
-        userId: "1"
-    } as JWT;
+    const token = await signIn({
+        secret: challenge,
+        timestamp,
+        wallet
+    });
+
+    localStorage.setItem('token', token);
+
+    return parseJwt(token);
 }
 
 export async function startPayment(plan: Plan): Promise<boolean> {

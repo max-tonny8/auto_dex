@@ -45,11 +45,9 @@ export default function Pay() {
 
     async function btnPayClick() {
         const result = await startPayment(plan);
-
         if(result) {
             setMessage('Payment authorized. Starting the first month charge. Wait...');
             // TODO: cobrar
-
             push('/dashboard');
         } else {
             setMessage('Payment failed in authorizing');
