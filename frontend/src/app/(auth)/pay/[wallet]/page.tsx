@@ -23,7 +23,7 @@ export default function Pay() {
         id: "3",
         name: "Gold",
         tokenSymbol: "WETH",
-        tokenAddress: "0x0000",
+        tokenAddress: wallet,
         price: ethers.parseEther("0.0001").toString(),
         maxAutomations: 10
     } as Plan);
@@ -84,7 +84,7 @@ export default function Pay() {
 
                     <div className="flex flex-col justify-start gap-1 w-full">
                         <label htmlFor="user">PLAN</label>
-                        <select name="plans" id="plan" className="p-2 rounded-sm focus:outline-none bg-sky-900 text-gray-100">
+                        <select defaultValue={user.planId || '1'} name="plans" id="plan" className="p-2 rounded-sm focus:outline-none bg-sky-900 text-gray-100">
                             <option value="1" selected={user.planId === "1"}>Bronze</option>
                             <option value="2" selected={user.planId === "2"}>Silver</option>
                             <option value="3" selected={user.planId === "3"}>Gold</option>

@@ -71,7 +71,7 @@ export class AuthController {
       
       Use the link below to finish your signup (copy and paste if link doesn't work):
 
-      ${Config.SITE_URL}/activate/${user.address}/${user.activationCode}
+      ${Config.SITE_URL}/register/activate?wallet=${user.address}&token=${user.activationCode}
 
       Or if you are with the activation page open, use the code below:
 

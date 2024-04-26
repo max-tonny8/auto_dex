@@ -51,7 +51,7 @@ export default function Register() {
             setMessage(err.response ? JSON.stringify(err.response.data) : err.message);
         }
 
-        push("/register/activate");
+        push(`/register/activate?wallet=${wallet}`);
     }
 
     return (

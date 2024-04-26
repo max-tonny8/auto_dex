@@ -6,12 +6,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { DefaultCard } from "@/components/default-card";
 import { useEffect, useState } from "react";
 import { activate, signOut } from "@/services/auth-service";
-import { sign } from "crypto";
-
-type User = {
-    name: string;
-    email: string;
-}
 
 export default function Activate() {
     const { push } = useRouter();
