@@ -1,16 +1,14 @@
 import { AdminNavbar } from "@/components/Dashboard/admin-navbar";
-import { DefaultCard } from "@/components/default-card";
 
-export default function Dashboard() {
+export default function Automations() {
     return (
       <div className="min-h-screen flex flex-1 flex-col overflow-y-scroll">
         <section className="bg-cyan-950 h-2/5 flex flex-col items-stretch justify-start px-14 py-2">
-          <AdminNavbar />
+          <AdminNavbar currentPage="Automations" />
         </section>
 
         <section className="flex-1 -mt-20 grid h-3/5 px-14">
-          <div className="bg-white h-96 overflow-hidden rounded-md shadow-md">
-          <div className="parent flex flex-col items-stretch justify-between flex-1 h-96">
+          <div className="bg-white h-96 overflow-hidden rounded-md shadow-md parent flex flex-col items-stretch justify-between flex-1">
             <h2 className="px-5 py-3 font-medium text-sm h-[10%]">Card tables</h2>
             <table className="child table-auto text-sm flex flex-col flex-1 h-[90%]">
                 <thead className="bg-gray-100 text-left uppercase">
@@ -85,8 +83,6 @@ export default function Dashboard() {
                     </tr>
                 </tbody>
             </table>
-          </div>
-
            </div>
         </section>
       </div>

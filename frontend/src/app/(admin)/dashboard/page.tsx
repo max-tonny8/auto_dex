@@ -9,7 +9,7 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen flex flex-1 flex-col overflow-y-scroll">
         <section className="bg-cyan-950 h-2/5 flex flex-col items-stretch justify-start px-14 py-2">
-          <AdminNavbar />
+          <AdminNavbar currentPage="Dashboard" />
 
           <div className="flex my-14 items-center gap-8 justify-between overflow-x-scroll">
             <StatisticTopCard title="Traffic" value={350897} difference={3.48} />

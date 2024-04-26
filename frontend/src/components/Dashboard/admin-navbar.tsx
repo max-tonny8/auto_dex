@@ -5,7 +5,11 @@ import Link from "next/link";
 import { generateAvatarURL } from "@cfx-kit/wallet-avatar";
 import Image from 'next/image';
 
-export function AdminNavbar() {
+type AdminNavbarProps = {
+  currentPage: string;
+}
+
+export function AdminNavbar({ currentPage }: AdminNavbarProps) {
     const [wallet, setWallet] = useState<string>("");
 
     useEffect(() => {
@@ -16,7 +20,7 @@ export function AdminNavbar() {
     return (
         <div className="flex justify-between items-center">
         <div className="">
-          <h1 className="text-white text-4xl font-bold">Poseidon Dashboard</h1>
+          <h1 className="text-white text-4xl font-bold">{currentPage}</h1>
           <p className="text-white text-lg">
             Welcome back, <strong>Caique</strong>
           </p>
