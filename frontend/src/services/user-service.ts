@@ -15,6 +15,6 @@ export async function updateUser(id: string, user: User): Promise<User> {
 }
 
 export async function payUser(): Promise<User> {
-    const response = await axios.patch(`${BACKEND_URL}/pay`);
+    const response = await axios.post(`${BACKEND_URL}/pay`);
     return response.data;
 }

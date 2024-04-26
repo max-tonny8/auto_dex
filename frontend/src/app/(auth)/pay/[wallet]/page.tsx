@@ -7,9 +7,10 @@ import { useEffect, useState } from "react";
 import { User } from 'commons/models/user';
 import { Plan } from 'commons/models/plan';
 import { Status } from "commons/models/status";
-import { ChainId } from "commons/models/chainId";
 import { startPayment } from "@/services/web3service";
 import { ethers } from "ethers";
+import { getJwt, signOut } from "@/services/auth-service";
+import { getUser, payUser } from "@/services/user-service";
 
 export default function Pay() {
     const { push } = useRouter();
@@ -30,27 +31,42 @@ export default function Pay() {
 
     useEffect(() => {
         setMessage("Loading payment details...");
-        setUser({
-            name: "Caique Ribeiro",
-            email: "ribeiro.caique95@gmail.com",
-            address: wallet,
-            privateKey: '',
-            planId: "3",
-            status: Status.BLOCKED,
-            network: ChainId.SEPOLIA,
-            activationCode: "123456",
-            activationDate: new Date()
-        });
-    }, [wallet]);
+
+        const jwt = getJwt();
+
+        if(!wallet || !jwt || jwt.address.toUpperCase() !== wallet.toUpperCase()) {
+            signOut();
+            return;
+        }
+
+        getUser(jwt.address)
+            .then(user => {
+                if(user.status === Status.ACTIVE) {
+                    push('/dashboard');
+                    return;
+                }
+                if(user.status !== Status.BLOCKED) {
+                    signOut();
+                    return;
+                }
+                setUser(user);
+                setMessage('');
+            })
+            .catch(err => setMessage(err.response ? JSON.stringify(err.response.data) : err.message));
+    }, [wallet, push]);
 
     async function btnPayClick() {
-        const result = await startPayment(plan);
-        if(result) {
-            setMessage('Payment authorized. Starting the first month charge. Wait...');
-            // TODO: cobrar
-            push('/dashboard');
-        } else {
-            setMessage('Payment failed in authorizing');
+        try {
+            const result = await startPayment(plan);
+            if(result) {
+                setMessage('Payment authorized. Starting the first month charge. Wait...');
+                await payUser();
+                return push('/dashboard');
+            } else {
+                setMessage('Payment failed in authorizing');
+            } 
+        } catch (err: any) {
+            setMessage((err.response ? JSON.stringify(err.response.data) : err.message));
         }
     }
 

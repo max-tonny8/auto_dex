@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { DefaultCard } from "@/components/default-card";
 import { useEffect, useState } from "react";
+import { activate, signOut } from "@/services/auth-service";
+import { sign } from "crypto";
 
 type User = {
     name: string;
@@ -15,19 +17,48 @@ export default function Activate() {
     const { push } = useRouter();
     const searchParams = useSearchParams();
 
-    const [token, setToken] = useState<string>(searchParams.get("token") || "");
-    const [wallet, setWallet] = useState<string>(searchParams.get("wallet") || "");
-    const [message, setMessage] = useState<string>("");
+    const [token, setToken] = useState<string>(searchParams.get('token') || '');
+    const [wallet, setWallet] = useState<string>(searchParams.get('wallet') || '');
+    const [message, setMessage] = useState<string>('');
 
     useEffect(() => {
         if(token && token.length === 6 && wallet) {
-            push("/pay");
+            activate(wallet, token)
+            .then(jwt => {
+                localStorage.setItem('token', jwt);
+                push(`/pay/${wallet}`);
+            })
+            .catch(err => setMessage(err.response ? JSON.stringify(err.response.data) : err.message));
+            return;
+        } else if(!wallet) {
+            const address = localStorage.getItem('wallet');
+            if(address) {
+                setWallet(address);
+            } else {
+                signOut();
+            }
         }
     }, [push, token, wallet]);
 
 
     function btnActivateClick() {
-        push("/pay");
+        if(!token || token.length < 6) {
+            setMessage('The activation code must have 6 digits');
+            return;
+        }
+        setMessage('Activating. Wait...');
+        const address = localStorage.getItem('wallet');
+        if(!address) {
+            signOut();
+            return;
+        }
+        activate(wallet, token)
+        .then(jwt => {
+            localStorage.setItem('token', jwt);
+            push(`/pay/${wallet}`);
+        })
+        .catch(err => setMessage(err.response ? JSON.stringify(err.response.data) : err.message));
+        return;
     }
 
     return (

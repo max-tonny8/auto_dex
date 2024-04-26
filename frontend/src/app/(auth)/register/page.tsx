@@ -6,8 +6,10 @@ import { useRouter} from 'next/navigation';
 import { DefaultCard } from "@/components/default-card";
 import { useState } from "react";
 import { getWallet } from "@/services/web3service";
+import { signUp } from "@/services/auth-service";
+import { User } from "commons/models/user";
 
-type User = {
+type UserProps = {
     name: string;
     email: string;
 }
@@ -16,10 +18,10 @@ export default function Register() {
     const { push } = useRouter();
 
     const [message, setMessage] = useState<string>("");
-    const [user, setUser] = useState<User>({
+    const [user, setUser] = useState<UserProps>({
         name: "",
         email: "",
-    } as User);
+    } as UserProps);
 
     function onUserChange(event: React.ChangeEvent<HTMLInputElement>) {
         setUser((prevState: any) => ({ ...prevState, [event.target.id]: event.target.value }));
@@ -36,6 +38,17 @@ export default function Register() {
                 setMessage((error as Error).message);
                 return;
             }
+        }
+
+        try {
+            await signUp({
+                name: user.name,
+                email: user.email,
+                address: wallet,
+                planId: "Gold"
+            } as User);
+        } catch (err: any) {
+            setMessage(err.response ? JSON.stringify(err.response.data) : err.message);
         }
 
         push("/register/activate");

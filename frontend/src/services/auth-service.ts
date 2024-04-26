@@ -21,6 +21,11 @@ export async function signUp(data: User) {
     return response.data;
 }
 
+export async function signOut() {
+    localStorage.clear();
+    window.location.href = '/login';
+}
+
 export async function activate(wallet: string, code: string): Promise<string> {
     if(!wallet || !code) return '';
     const response = await axios.post(`${BACKEND_URL}/activate/${wallet}/${code}`, { wallet, code });
@@ -32,4 +37,10 @@ export function parseJwt(token: string): JWT {
     const base64str = token.split('.')[1];
     const base64 = base64str.replace('-', '+').replace('_', '/'); // to make it full valid base64
     return JSON.parse(window.atob(base64));
+}
+
+export function getJwt(): JWT | null {
+    const token = localStorage.getItem('token');
+    if(!token) return null;
+    return parseJwt(token);
 }
