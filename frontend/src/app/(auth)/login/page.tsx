@@ -1,18 +1,47 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter} from 'next/navigation';
 import Image from "next/image";
 import Link from "next/link";
 import { DefaultCard } from "@/components/default-card";
+import { doLogin } from '@/services/web3service';
+import { Status } from "commons/models/status";
 
 export default function Login() {
+    const [message, setMessage] = useState<string>("");
+
     const { push } = useRouter();
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            push("/dashboard");
+        }
+    }, [push]);
+
     async function btnLoginClick() {
-        push("/register");
+        setMessage("Logging in...");
+        try {
+            const jwt = await doLogin();
+            if(!jwt) return;
+            
+            if(jwt.status === Status.ACTIVE) {
+                push("/dashboard");
+            } else if(jwt.status === Status.BLOCKED)  {
+                push(`/pay/${jwt.address}`);
+            } else if(jwt.status === Status.NEW) {
+                push(`/register/activate?wallet=${jwt.address}`);    
+            } else if(jwt.status === Status.BANNED) {
+                push('/login');
+            } else {
+                push('/register');
+            }
+        } catch (error) {
+            setMessage((error as Error).message);   
+        }
     }
 
-    const [message, setMessage] = useState<string>("");
     return (
         <div className="relative flex flex-col h-screen items-center justify-center">
         <h1 className="text-gray-50 font-bold text-4xl mb-6">POSEIDON</h1>

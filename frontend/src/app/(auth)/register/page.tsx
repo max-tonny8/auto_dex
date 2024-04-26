@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter} from 'next/navigation';
 import { DefaultCard } from "@/components/default-card";
 import { useState } from "react";
+import { getWallet } from "@/services/web3service";
 
 type User = {
     name: string;
@@ -14,18 +15,30 @@ type User = {
 export default function Register() {
     const { push } = useRouter();
 
+    const [message, setMessage] = useState<string>("");
     const [user, setUser] = useState<User>({
         name: "",
         email: "",
     } as User);
-    const [message, setMessage] = useState<string>("");
 
     function onUserChange(event: React.ChangeEvent<HTMLInputElement>) {
         setUser((prevState: any) => ({ ...prevState, [event.target.id]: event.target.value }));
     }
 
-    function btnRegisterClick() {
-        push("/")
+    async function btnRegisterClick() {
+        setMessage("Registering...");
+
+        let wallet = localStorage.getItem("wallet");
+        if(!wallet) {
+            try {
+                wallet = await getWallet();
+            } catch (error) {
+                setMessage((error as Error).message);
+                return;
+            }
+        }
+
+        push("/register/activate");
     }
 
     return (

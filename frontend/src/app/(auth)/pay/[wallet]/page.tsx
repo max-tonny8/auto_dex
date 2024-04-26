@@ -8,6 +8,8 @@ import { User } from 'commons/models/user';
 import { Plan } from 'commons/models/plan';
 import { Status } from "commons/models/status";
 import { ChainId } from "commons/models/chainId";
+import { startPayment } from "@/services/web3service";
+import { ethers } from "ethers";
 
 export default function Pay() {
     const { push } = useRouter();
@@ -16,10 +18,18 @@ export default function Pay() {
     const wallet: string = typeof params.wallet === "string" ? params.wallet : params.wallet[0];
 
     const [user, setUser] = useState<User>({} as User);
-    const [plan, setPlan] = useState<Plan>({} as Plan);
+    const [plan, setPlan] = useState<Plan>({
+        id: "3",
+        name: "Gold",
+        tokenSymbol: "WETH",
+        tokenAddress: "0x0000",
+        price: ethers.parseEther("0.0001").toString(),
+        maxAutomations: 10
+    } as Plan);
     const [message, setMessage] = useState<string>("");
 
     useEffect(() => {
+        setMessage("Loading payment details...");
         setUser({
             name: "Caique Ribeiro",
             email: "ribeiro.caique95@gmail.com",
@@ -31,19 +41,19 @@ export default function Pay() {
             activationCode: "123456",
             activationDate: new Date()
         });
-
-        setPlan({
-            id: "3",
-            name: "Gold",
-            tokenSymbol: "WETH",
-            tokenAddress: "0x0000",
-            price: "0.001",
-            maxAutomations: 10
-        });
     }, [wallet]);
 
-    function btnPayClick() {
-        push("/dashboard")
+    async function btnPayClick() {
+        const result = await startPayment(plan);
+
+        if(result) {
+            setMessage('Payment authorized. Starting the first month charge. Wait...');
+            // TODO: cobrar
+
+            push('/dashboard');
+        } else {
+            setMessage('Payment failed in authorizing');
+        }
     }
 
     return (
@@ -68,7 +78,7 @@ export default function Pay() {
                     </div>
 
                     <span className="font-light">
-                        This system costs <strong className="font-black">{plan.tokenSymbol} ${plan.price}/mo.</strong> and gives you full access to out platform,
+                        This system costs <strong className="font-black">{plan.tokenSymbol} {`${ethers.formatEther(plan.price)}`}/mo.</strong> and gives you full access to out platform,
                         as well as <strong className="font-black">{plan.maxAutomations}</strong> automations
                         <br /><br />
                         You last payment was: <strong className="font-black">Never</strong>
