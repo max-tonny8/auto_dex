@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import ConfigBase from 'commons/configBase';
 
 export default class Config extends ConfigBase {

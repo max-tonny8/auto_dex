@@ -52,7 +52,7 @@ export class AuthController {
       throw new UnauthorizedException('User is banned');
 
     return this.authService.createToken({
-      userId: user.id,
+      userId: user.id as string,
       address: user.address,
       name: user.name,
       planId: user.planId,
@@ -113,7 +113,7 @@ export class AuthController {
     });
 
     return this.authService.createToken({
-      userId: user.id,
+      userId: user.id as string,
       address: user.address,
       name: user.name,
       planId: user.planId,

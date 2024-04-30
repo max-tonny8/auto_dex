@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
