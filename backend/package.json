@@ -52,6 +52,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
     "jest": "^29.5.0",
+    "jest-mock-extended": "^3.0.6",
     "prettier": "^3.0.0",
     "source-map-support": "^0.5.21",
     "supertest": "^6.3.3",
@@ -67,7 +68,10 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "roots": [
+      "src",
+      "test"
+    ],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -75,8 +79,18 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
+    "coveragePathIgnorePatterns": [
+      "node_modules",
+      "test"
+    ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "moduleNameMapper": {
+      "commons/(.*)": "<rootDir>/../_commons_/$1"
+    },
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/db.mock.ts"
+    ]
   },
   "resolutions": {
     "wrap-ansi": "7.0.0",

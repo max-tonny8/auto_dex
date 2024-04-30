@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { User } from 'commons/models/user';
-import connect from '../db';
+import db from '../db';
 import { UserDTO } from './user.dto';
 import { Status } from 'commons/models/status';
 import Config from '../config';
@@ -15,7 +15,6 @@ import { encrypt, decrypt } from 'commons/services/cryptoService';
 @Injectable()
 export class UserService {
   async getUserByWallet(address: string): Promise<User> {
-    const db = await connect();
     const user = await db.users.findFirst({
       where: {
         address: {
@@ -32,7 +31,6 @@ export class UserService {
   }
 
   async getUser(id: string): Promise<User> {
-    const db = await connect();
     const user = await db.users.findUnique({
       where: {
         id: id,
@@ -47,8 +45,6 @@ export class UserService {
   }
 
   async addUser(user: UserDTO): Promise<User> {
-    const db = await connect();
-
     const oldUser = await db.users.findFirst({
       where: {
         OR: [
@@ -96,8 +92,6 @@ export class UserService {
   }
 
   async updateUser(id: string, user: UserDTO): Promise<User> {
-    const db = await connect();
-
     const data: any = {
       address: user.address,
       email: user.email,
@@ -121,9 +115,6 @@ export class UserService {
     const user = await this.getUserByWallet(address);
     if (!user) throw new NotFoundException();
     if (user.status !== Status.BLOCKED) throw new ForbiddenException();
-
-    const db = await connect();
-
     // todo: pay via blockchain
 
     const updatedUser = await db.users.update({
@@ -163,7 +154,6 @@ export class UserService {
       throw new UnauthorizedException('Activation code expired');
     }
 
-    const db = await connect();
     const updatedUser = await db.users.update({
       where: { id: user.id },
       data: {
