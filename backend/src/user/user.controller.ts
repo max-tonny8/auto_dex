@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO } from './user.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthGuard } from '../auth/auth.guard';
+import { AuthService } from '../auth/auth.service';
 
 @Controller('users')
 export class UserController {
@@ -24,7 +24,7 @@ export class UserController {
   @Post('pay')
   async pay(@Headers('Authorization') authorization: string) {
     const jwt = this.authService.decodeToken(authorization);
-    await this.userService.payUser(jwt.address);
+    return await this.userService.payUser(jwt.address);
   }
 
   @UseGuards(AuthGuard)

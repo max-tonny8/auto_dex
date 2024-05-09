@@ -1,8 +1,7 @@
 import { JWT } from 'commons/models/jwt';
 import ConfigService from './config-service';
-import { BrowserProvider } from 'ethers';
+import { BrowserProvider, Contract } from 'ethers';
 import { Plan } from 'commons/models/plan';
-import { Contract } from 'ethers';
 import ERC20_ABI from 'commons/services/ERC20.json';
 import { parseJwt, signIn } from './auth-service';
 

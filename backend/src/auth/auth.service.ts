@@ -18,7 +18,7 @@ export class AuthService {
     return this.jwtService.decode(authorization.replace('Bearer ', ''));
   }
 
-  checkToken(token: string) {
+  async checkToken(token: string) {
     try {
       return this.jwtService.verify(token.replace('Bearer ', ''), {
         secret: Config.JWT_SECRET,
