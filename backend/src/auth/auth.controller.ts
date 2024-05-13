@@ -2,14 +2,13 @@ import {
   BadRequestException,
   Body,
   Controller,
-  NotFoundException,
   Param,
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthDTO } from './auth.dto';
 import { UserDTO } from '../user/user.dto';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { User } from 'commons/models/user';
 import { MailerService } from '@nestjs-modules/mailer';
 import Config from '../config';
@@ -47,7 +46,6 @@ export class AuthController {
     }
 
     const user = await this.userService.getUserByWallet(data.wallet);
-    if (!user) throw new NotFoundException('User not found');
     if (user.status === Status.BANNED)
       throw new UnauthorizedException('User is banned');
 

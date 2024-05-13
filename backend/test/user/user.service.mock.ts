@@ -42,6 +42,19 @@ export const activeUserMock = {
   status: Status.ACTIVE,
 } as users;
 
+export const bannedUserMock = {
+  address: '0x123',
+  name: 'Caique Ribeiro',
+  email: 'caique@gmail.com',
+  id: 'abc123',
+  activationCode: '123456',
+  activationDate: new Date(),
+  network: ChainId.MAINNET,
+  planId: 'Gold',
+  privateKey: 'abc123',
+  status: Status.BANNED,
+} as users;
+
 export const userServiceMock = {
   provide: UserService,
   useValue: {
