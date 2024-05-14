@@ -1,8 +1,12 @@
 <p align="center">
-  <a href="https://nestjs.com/" target="blank"><img src="https://github.com/CaiqueRibeiro/decentralized-stripe/assets/23503499/198adee3-34dd-41c0-b955-e3d4a19dff04" width="120" alt="Nest Logo" /></a>
+  <a href="https://github.com/CaiqueRibeiro/poseidon" target="blank"><img src="https://github.com/CaiqueRibeiro/decentralized-stripe/assets/23503499/198adee3-34dd-41c0-b955-e3d4a19dff04" width="300" alt="Poseidon Logo" /></a>
 </p>
 
-# 🔱 Poseidon 🔱 Web3 platform for swaps in DeX
+  <p style="font-size: 40px;font-weight: bold;" align="center">🔱 Poseidon 🔱</p>
+    <p style="font-size: 20px;font-weight: bold; margin-top:-20px;" align="center">Web3 platform for swaps in DeX</p>
+
+
+# 
 
 Poseidon is a multitenant SaaS platform that allow cripto inthusiast to make swaps in DeX when the cripto prices are really good.
 
