@@ -19,5 +19,7 @@ Buy cripto in DeX. Pay us with crypto. Be happy (and maybe rich).
 | 🐟   | **Sepolia** Testnet blockchain to deploy smartcontracts in real world. |
 | 👨🏻‍💻   | **Node.js** Most known javascript engine for backend applications |
 | 💠   | **Typescript** Superset of Javascript to improve software design |
+| 📱   | **Next.js** React.js with superpowers |
+| 🦁   | **Nest.js** Node.js Framework for enterprise projects |
 
 ## Under construction
