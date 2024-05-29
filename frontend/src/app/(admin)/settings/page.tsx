@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminNavbar } from "@/components/Dashboard/admin-navbar";
+import { Alert } from "@/components/Alert";
 import { getUser, updateUser } from "@/services/user-service";
 import { User } from "commons/models/user";
 import { getJwt } from "@/services/auth-service";
@@ -10,6 +11,7 @@ import { getJwt } from "@/services/auth-service";
 export default function Settings() {
     const [user, setUser] = useState<User>({} as User);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>("");
     const [error, setError] = useState<string>("");
 
     const { push } = useRouter();
@@ -22,7 +24,7 @@ export default function Settings() {
         }
         getUser(jwt.address)
         .then(user => setUser({...user, privateKey: ''}))
-        .catch(err => setError(err.message ? JSON.stringify(err.response.data) : err.message));
+        .catch(err => setError(err.message ? err.response.data : err.message));
     }, [push]);
 
     function onUserChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -39,10 +41,11 @@ export default function Settings() {
         updateUser(jwt.userId, user)
         .then(user => {
             setUser({...user, privateKey: ''});
+            setMessage('Settings saved successfully');
             setIsLoading(false);
         })
         .catch(err => {
-            setError(err.message ? JSON.stringify(err.response.data) : err.message);
+            setError(err.message ? err.response.data : err.message);
             setIsLoading(false);
         });
     }
@@ -63,6 +66,11 @@ export default function Settings() {
                     </button>
                 </div>
 
+                { message || error
+                    ? <Alert isError={!message} message={error ? error : message} />
+                    : <></> 
+                }
+                
                 <form className="w-full flex flex-col bg-gray-100 flex-1 py-4 px-8 divide-y">
                     <div className="flex flex-col gap-2 pb-5">
                         <h3 className="text-sm text-gray-500 uppercase">User Information</h3>
