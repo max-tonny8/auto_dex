@@ -1,33 +1,50 @@
 'use client';
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AdminNavbar } from "@/components/Dashboard/admin-navbar";
-import { useState } from "react";
-
-type SettingsInputProps = {
-    name: string;
-    email: string;
-    planId: number;
-    network: number;
-    address: string;
-    privateKey: string;
-}
+import { getUser, updateUser } from "@/services/user-service";
+import { User } from "commons/models/user";
+import { getJwt } from "@/services/auth-service";
 
 export default function Settings() {
-    const [settings, setSettings] = useState<SettingsInputProps>({
-        name: "",
-        email: "",
-        planId: 1,
-        network: 0,
-        address: "",
-        privateKey: "",
-    } as SettingsInputProps);
+    const [user, setUser] = useState<User>({} as User);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
 
-    function onSettingsChange(event: React.ChangeEvent<HTMLInputElement>) {
-        setSettings((prevState: any) => ({ ...prevState, [event.target.id]: event.target.value }));
+    const { push } = useRouter();
+
+    useEffect(() => {
+        const jwt = getJwt();
+        if(!jwt) {
+            push('/');
+            return;
+        }
+        getUser(jwt.address)
+        .then(user => setUser({...user, privateKey: ''}))
+        .catch(err => setError(err.message ? JSON.stringify(err.response.data) : err.message));
+    }, [push]);
+
+    function onUserChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setUser((prevState: any) => ({ ...prevState, [event.target.id]: event.target.value }));
     }
 
     async function handleSubmit() {
-        alert(JSON.stringify(settings));
+        setIsLoading(true);
+        const jwt = getJwt();
+        if(!jwt) {
+            push('/');
+            return;
+        }
+        updateUser(jwt.userId, user)
+        .then(user => {
+            setUser({...user, privateKey: ''});
+            setIsLoading(false);
+        })
+        .catch(err => {
+            setError(err.message ? JSON.stringify(err.response.data) : err.message);
+            setIsLoading(false);
+        });
     }
     return (
       <div className="min-h-screen flex flex-1 flex-col overflow-y-scroll">
@@ -39,7 +56,11 @@ export default function Settings() {
           <div className="bg-white h-fit rounded-md shadow-md parent flex flex-col items-stretch justify-between flex-1">
                 <div className="px-7 py-4 flex items-center justify-between">
                     <h2 className="font-medium text-sm h-[10%]">My account</h2>
-                    <button className="bg-sky-500 text-white rounded-sm px-3 py-1 font-semibold text-sm hover:bg-sky-600" onClick={handleSubmit}>Save Settings</button>
+                    <button className="bg-sky-500 text-white rounded-sm px-3 py-1 font-semibold text-sm hover:bg-sky-600" onClick={handleSubmit}>
+                        {
+                            isLoading ? 'Saving...' : 'Save Settings'
+                        }
+                    </button>
                 </div>
 
                 <form className="w-full flex flex-col bg-gray-100 flex-1 py-4 px-8 divide-y">
@@ -51,8 +72,8 @@ export default function Settings() {
                             id="name"
                             type="text"
                             placeholder="Your name"
-                            value={settings ? settings.name : ''}
-                            onChange={onSettingsChange}
+                            value={user.name || ''}
+                            onChange={onUserChange}
                             className="p-2 rounded-sm bg-gray-200 border border-white focus:bg-white focus:outline-none font-light" />
 
                             <label className="mt-4" htmlFor="email">EMAIL</label>
@@ -60,17 +81,17 @@ export default function Settings() {
                             id="email"
                             type="email"
                             placeholder="Your email"
-                            value={settings ? settings.email : ''}
-                            onChange={onSettingsChange}
+                            value={user.email || ''}
+                            onChange={onUserChange}
                             className="p-2 rounded-sm bg-gray-200 border border-white focus:bg-white focus:outline-none font-light" />
 
                             <label className="mt-4" htmlFor="email">PLAN</label>
                             <input
                             id="planId"
-                            type="number"
+                            type="string"
                             placeholder="Your chosen plan"
-                            value={settings ? settings.planId : ''}
-                            onChange={onSettingsChange}
+                            value={user.planId || ''}
+                            disabled={true}
                             className="p-2 rounded-sm bg-gray-200 border border-white focus:bg-white focus:outline-none font-light" />
                         </div>
                     </div>
@@ -83,8 +104,8 @@ export default function Settings() {
                             id="network"
                             type="number"
                             placeholder="Choose a network"
-                            value={settings ? settings.network : ''}
-                            onChange={onSettingsChange}
+                            value={user.network || ''}
+                            onChange={onUserChange}
                             className="p-2 rounded-sm bg-gray-200 border border-white focus:bg-white focus:outline-none font-light" />
 
                             <label className="mt-4" htmlFor="email">ADDRESS</label>
@@ -92,17 +113,17 @@ export default function Settings() {
                             id="address"
                             type="address"
                             placeholder="Insert your wallet address"
-                            value={settings ? settings.address : ''}
-                            onChange={onSettingsChange}
+                            value={user.address || ''}
+                            onChange={onUserChange}
                             className="p-2 rounded-sm bg-gray-200 border border-white focus:bg-white focus:outline-none font-light" />
 
                             <label className="mt-4" htmlFor="email">PRIVATE KEY</label>
                             <input
                             id="privateKey"
-                            type="privaetKey"
+                            type="password"
                             placeholder="Insert your private key for operations"
-                            value={settings ? settings.privateKey : ''}
-                            onChange={onSettingsChange}
+                            value={user.privateKey || ''}
+                            onChange={onUserChange}
                             className="p-2 rounded-sm bg-gray-200 border border-white focus:bg-white focus:outline-none font-light" />
                         </div>
                     </div>

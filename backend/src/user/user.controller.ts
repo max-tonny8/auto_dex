@@ -5,6 +5,7 @@ import {
   Get,
   Headers,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -48,7 +49,7 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
-  @Post(':id')
+  @Patch(':id')
   async updateUser(
     @Headers('Authorization') authorization: string,
     @Param('id') id: string,
