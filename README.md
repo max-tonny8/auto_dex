@@ -5,7 +5,7 @@
   <h1 align="center">🔱 Poseidon 🔱</h1>
   <p style="font-size: 20px;font-weight: bold; margin-top:-20px;" align="center">Web3 platform for swaps in DeX</p>
 
-Poseidon is a multitenant SaaS platform that allow cripto inthusiast to make swaps in DeX when the cripto prices are really good.
+Poseidon is a multitenant SaaS platform that allow crypto inthusiast to make swaps in DeX when the crypto prices are really good.
 
 Buy cripto in DeX. Pay us with crypto. Be happy (and maybe rich).
 
